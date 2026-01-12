@@ -1,15 +1,283 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Econ Pro Editor</title>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econ Pro Editor V2</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-      body { margin: 0; background: #000; color: white; font-family: sans-serif; }
+        :root {
+            --primary-bg: #1a1a1a;
+            --sidebar-bg: #252525;
+            --accent: #3498db;
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* প্রিভিউ এরিয়া (বামে) */
+        .preview-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(#333 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .canvas-container {
+            width: 800px;
+            height: 450px; /* 16:9 ratio */
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #ff6b6b 100%);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* টেক্সট স্টাইল */
+        .draggable-text {
+            position: relative; /* স্লাইডার দিয়ে কন্ট্রোল হবে */
+            cursor: pointer;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            transition: all 0.1s;
+            line-height: 1.2;
+            width: 100%;
+        }
+
+        #mainTitleDisplay {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #subtitleDisplay {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        /* এডিটর প্যানেল (ডানে) */
+        .editor-panel {
+            width: 350px;
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .control-group h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        input[type="text"], input[type="color"] {
+            width: 100%;
+            padding: 8px;
+            background: #444;
+            border: 1px solid #555;
+            color: white;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        input[type="color"] {
+            height: 40px;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+        .btn-download {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-download:hover {
+            background-color: #2980b9;
+        }
+
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/index.tsx"></script>
-  </body>
+</head>
+<body>
+
+    <div class="preview-area">
+        <div class="canvas-container" id="captureArea">
+            <i class="fas fa-play-circle" style="font-size: 3rem; color: rgba(255,255,255,0.3); position: absolute; top: 20px; left: 20px;"></i>
+            
+            <div id="mainTitleDisplay" class="draggable-text">অর্থনীতি ১.১</div>
+            
+            <div id="subtitleDisplay" class="draggable-text">মুদ্রাস্ফীতি কী?</div>
+            
+            <div style="position: absolute; bottom: 20px; right: 20px; font-size: 0.9rem; opacity: 0.7;">
+                SUBSCRIBE
+            </div>
+        </div>
+    </div>
+
+    <div class="editor-panel">
+        <div class="panel-header">
+            <i class="fas fa-edit fa-lg"></i>
+            <h2>Econ Editor Pro</h2>
+        </div>
+
+        <div class="control-group">
+            <h4>Main Title</h4>
+            <input type="text" id="titleInput" value="অর্থনীতি ১.১">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Color</label>
+                    <input type="color" id="titleColor" value="#ffffff">
+                </div>
+                <div style="flex:1">
+                    <label>Size</label>
+                    <input type="range" id="titleSize" min="20" max="100" value="48">
+                </div>
+            </div>
+            <label>Vertical Position (Y)</label>
+            <input type="range" id="titlePosY" min="-200" max="200" value="0">
+        </div>
+
+        <div class="control-group">
+            <h4>Subtitle</h4>
+            <input type="text" id="subInput" value="মুদ্রাস্ফীতি কী?">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Color</label>
+                    <input type="color" id="subColor" value="#f1c40f">
+                </div>
+                <div style="flex:1">
+                    <label>Size</label>
+                    <input type="range" id="subSize" min="15" max="80" value="32">
+                </div>
+            </div>
+            <label>Vertical Position (Y)</label>
+            <input type="range" id="subPosY" min="-200" max="200" value="0">
+        </div>
+
+        <div class="control-group">
+            <h4>Background</h4>
+            <label>Gradient Style</label>
+            <select id="bgSelect" style="width: 100%; padding: 8px; background: #444; color: white; border: none; border-radius: 4px;">
+                <option value="linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #ff6b6b 100%)">Blue to Red</option>
+                <option value="linear-gradient(45deg, #11998e, #38ef7d)">Green Tech</option>
+                <option value="linear-gradient(to right, #833ab4, #fd1d1d, #fcb045)">Instagram Style</option>
+                <option value="#000000">Solid Black</option>
+            </select>
+        </div>
+
+        <button class="btn-download" onclick="downloadThumbnail()">
+            <i class="fas fa-download"></i> Download Image
+        </button>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        // এলিমেন্ট সিলেক্ট করা
+        const titleDisplay = document.getElementById('mainTitleDisplay');
+        const subDisplay = document.getElementById('subtitleDisplay');
+        const canvas = document.getElementById('captureArea');
+
+        // ইভেন্ট লিসেনার সেটআপ
+        function setupListener(inputId, targetEl, property, unit = '') {
+            document.getElementById(inputId).addEventListener('input', (e) => {
+                if(property === 'innerText') {
+                    targetEl.innerText = e.target.value;
+                } else if(property === 'translateY') {
+                    targetEl.style.transform = `translateY(${e.target.value}px)`;
+                } else {
+                    targetEl.style[property] = e.target.value + unit;
+                }
+            });
+        }
+
+        // মেইন টাইটেল কন্ট্রোল
+        setupListener('titleInput', titleDisplay, 'innerText');
+        setupListener('titleColor', titleDisplay, 'color');
+        setupListener('titleSize', titleDisplay, 'fontSize', 'px');
+        setupListener('titlePosY', titleDisplay, 'translateY');
+
+        // সাবটাইটেল কন্ট্রোল
+        setupListener('subInput', subDisplay, 'innerText');
+        setupListener('subColor', subDisplay, 'color');
+        setupListener('subSize', subDisplay, 'fontSize', 'px');
+        setupListener('subPosY', subDisplay, 'translateY');
+
+        // ব্যাকগ্রাউন্ড চেঞ্জ
+        document.getElementById('bgSelect').addEventListener('change', (e) => {
+            canvas.style.background = e.target.value;
+        });
+
+        // ডাউনলোড ফাংশন
+        function downloadThumbnail() {
+            const btn = document.querySelector('.btn-download');
+            btn.innerText = 'Generating...';
+            
+            html2canvas(document.getElementById("captureArea")).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'econ_thumbnail.png';
+                link.href = canvas.toDataURL();
+                link.click();
+                btn.innerHTML = '<i class="fas fa-download"></i> Download Image';
+            });
+        }
+    </script>
+</body>
 </html>
