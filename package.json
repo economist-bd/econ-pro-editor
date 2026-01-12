@@ -5,15 +5,14 @@
   "description": "Economics Video Editor using Remotion",
   "main": "index.js",
   "scripts": {
-    "start": "remotion preview",
-    "build": "remotion build EconomicsVideo --site --out-dir dist",
-    "deploy": "gh-pages -d dist",
-    "render": "remotion render",
-    "upgrade": "remotion upgrade",
-    "test": "eslint src --ext ts,tsx,js,jsx"
+    "start": "vite",
+    "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@remotion/google-fonts": "^4.0.0",
+    "@remotion/player": "^4.0.404",
     "@remotion/transitions": "^4.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -25,10 +24,12 @@
     "@remotion/eslint-config": "^4.0.0",
     "@types/react": "^18.0.0",
     "@types/web": "^0.0.86",
+    "@vitejs/plugin-react": "^5.1.2",
     "eslint": "^8.0.0",
     "gh-pages": "^6.3.0",
     "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^7.3.1"
   },
   "packageManager": "npm@9.6.0"
 }

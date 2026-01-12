@@ -8,13 +8,11 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="EconomicsVideo"
         component={MyComposition}
-        durationInFrames={300} // ১০ সেকেন্ড
+        durationInFrames={300}
         fps={30}
         width={1920}
         height={1080}
-        // স্কিমা কানেক্ট করা হলো
         schema={myCompSchema}
-        // ডিফল্ট ভ্যালু (অ্যাপ ওপেন করলে যা দেখাবে)
         defaultProps={{
           title1: "অর্থনীতি ১.১",
           title1Color: "#ffffff",
