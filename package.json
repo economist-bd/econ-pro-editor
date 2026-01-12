@@ -1,35 +1,34 @@
 {
   "name": "econ-pro-editor",
   "version": "1.0.0",
-  "description": "My Remotion video",
-  "repository": {},
-  "license": "UNLICENSED",
-  "private": true,
+  "homepage": "https://github.com/economist-bd/econ-pro-editor",
+  "description": "Economics Video Editor using Remotion",
+  "main": "index.js",
+  "scripts": {
+    "start": "remotion preview",
+    "build": "remotion build EconomicsVideo --site --out-dir dist",
+    "deploy": "gh-pages -d dist",
+    "render": "remotion render",
+    "upgrade": "remotion upgrade",
+    "test": "eslint src --ext ts,tsx,js,jsx"
+  },
   "dependencies": {
-    "@remotion/cli": "4.0.404",
-    "@remotion/zod-types": "4.0.404",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "remotion": "4.0.404",
-    "zod": "3.22.3",
-    "@remotion/tailwind-v4": "4.0.404",
-    "tailwindcss": "4.0.0"
+    "@remotion/google-fonts": "^4.0.0",
+    "@remotion/transitions": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "remotion": "^4.0.0",
+    "zod": "^3.22.3"
   },
   "devDependencies": {
-    "@remotion/eslint-config-flat": "4.0.404",
-    "@types/react": "19.2.7",
-    "@types/web": "0.0.166",
-    "eslint": "9.19.0",
-    "prettier": "3.6.0",
-    "typescript": "5.9.3"
+    "@remotion/cli": "^4.0.0",
+    "@remotion/eslint-config": "^4.0.0",
+    "@types/react": "^18.0.0",
+    "@types/web": "^0.0.86",
+    "eslint": "^8.0.0",
+    "gh-pages": "^6.3.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
   },
-  "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
-    "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
-  },
-  "sideEffects": [
-    "*.css"
-  ]
+  "packageManager": "npm@9.6.0"
 }
